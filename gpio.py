@@ -115,7 +115,7 @@ def cleanup(pin=None, assert_exists=False):
 
 
 @_verify
-def setup(pin, mode, pullup=None, initial=False):
+def _setup(pin, mode=None, pullup=None, initial=False):
     '''Setup pin with mode IN or OUT.
 
     Args:
@@ -140,6 +140,13 @@ def setup(pin, mode, pullup=None, initial=False):
         else:
             set(pin, 0)
 
+
+def setup(pins, mode=None):
+    if isinstance(pins, (list, tuple)):
+        for pin in pins:
+            _setup(pin, mode)
+    else:
+        _setup(pins, mode)
 
 @_verify
 def mode(pin):
