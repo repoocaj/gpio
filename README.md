@@ -8,6 +8,7 @@ to the same methods.
 
 
 ## Supported Features
+- log level: set log level to DEBUG to see debug messages
 - get pin values with `read(pin)` or `input(pin)`
 - set pin values with `set(pin, value)` or `output(pin, value)`
 - get the pin mode with `mode(pin)`
