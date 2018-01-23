@@ -5,7 +5,6 @@ import threading
 import os
 import sys
 import traceback
-import pdb
 
 import logging
 # logging.basicConfig(level=logging.ERROR)
@@ -16,7 +15,6 @@ log = logging.getLogger(__name__)
 def except_hook(exctype, value, tb):
     traceback.print_tb(tb)
     print(repr(value))
-    pdb.post_mortem(tb)
 
 
 class PinState(object):
