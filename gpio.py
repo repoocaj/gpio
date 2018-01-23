@@ -5,12 +5,7 @@ import threading
 import os
 import sys
 import traceback
-
 import logging
-# logging.basicConfig(level=logging.ERROR)
-logging.basicConfig(level=logging.CRITICAL)
-log = logging.getLogger(__name__)
-
 
 def except_hook(exctype, value, tb):
     traceback.print_tb(tb)
@@ -49,12 +44,14 @@ LOW, HIGH = 0, 1
 
 
 def _write(f, v):
+    log = logging.getLogger(__name__)
     log.debug("writing: {0}: {1}".format(f, v))
     f.write(str(v))
     f.flush()
 
 
 def _read(f):
+    log = logging.getLogger(__name__)
     log.debug("Reading: {0}".format(f))
     f.seek(0)
     return f.read().strip()
@@ -68,6 +65,7 @@ def _verify(function):
         if pin not in _open:
             ppath = gpiopath(pin)
             if not os.path.exists(ppath):
+                log = logging.getLogger(__name__)
                 log.debug("Creating Pin {0}".format(pin))
                 with _export_lock:
                     with open(pjoin(gpio_root, 'export'), 'w') as f:
@@ -104,6 +102,7 @@ def cleanup(pin=None, assert_exists=False):
     state.value.close()
     state.direction.close()
     if os.path.exists(gpiopath(pin)):
+        log = logging.getLogger(__name__)
         log.debug("Unexporting pin {0}".format(pin))
         with _export_lock:
             with open(pjoin(gpio_root, 'unexport'), 'w') as f:
@@ -129,6 +128,7 @@ def setup(pin, mode, pullup=None, initial=False):
     if mode not in (IN, OUT, LOW, HIGH):
         raise ValueError(mode)
 
+    log = logging.getLogger(__name__)
     log.debug("Setup {0}: {1}".format(pin, mode))
     f = _open[pin].direction
     _write(f, mode)
@@ -159,6 +159,7 @@ def read(pin):
     '''
     f = _open[pin].value
     out = int(_read(f))
+    log = logging.getLogger(__name__)
     log.debug("Read {0}: {1}".format(pin, out))
     return out
 
@@ -166,6 +167,7 @@ def read(pin):
 @_verify
 def set(pin, value):
     '''set the pin value to 0 or 1'''
+    log = logging.getLogger(__name__)
     log.debug("Write {0}: {1}".format(pin, value))
     f = _open[pin].value
     _write(f, value)
